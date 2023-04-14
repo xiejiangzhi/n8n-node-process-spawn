@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-process-spawn",
+  "name": "n8n-nodes-ProcessSpawn",
   "version": "0.1.1",
   "description": "Add a node to run spawn process with stdin",
   "keywords": [
@@ -29,8 +29,7 @@
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
-    "credentials": [
-    ],
+    "credentials": [],
     "nodes": [
       "dist/nodes/ProcessSpawnNode/ProcessSpawnNode.node.js"
     ]

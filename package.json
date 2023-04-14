@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-spawn-process",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Add a node to run spawn process with stdin",
   "keywords": [
     "n8n-community-node-package"

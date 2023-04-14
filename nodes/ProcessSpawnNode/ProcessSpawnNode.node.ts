@@ -10,12 +10,12 @@ import { spawnSync } from 'child_process'
 export class ProcessSpawnNode implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Process Spawn Node',
-		name: 'ProcessSpawnNode',
+		name: 'processSpawnNode',
 		group: ['transform'],
 		version: 1,
 		description: 'Spawn a child process to exec a system command. with stdin iinput',
 		defaults: {
-			name: 'ProcessSpawnNode',
+			name: 'processSpawnNode',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
@@ -66,6 +66,14 @@ export class ProcessSpawnNode implements INodeType {
 				description: 'Command environment',
 			},
       {
+				displayName: 'Stdin',
+				name: 'Stdin',
+				type: 'string',
+				default: '',
+				placeholder: '',
+				description: 'Send to stdin, default send input JSON',
+			},
+      {
 				displayName: 'Working Dir',
 				name: 'WorkingDir',
 				type: 'string',
@@ -98,6 +106,7 @@ export class ProcessSpawnNode implements INodeType {
 		let Cmd: string;
 		let Args;
 		let Envs;
+		let Stdin: string;
 		let WorkingDir: string;
 		let StdoutFormat: string;
 
@@ -112,7 +121,7 @@ export class ProcessSpawnNode implements INodeType {
 				Envs = this.getNodeParameter('Envs.envs', itemIndex, []) as [{ name: string, value: string }];
         let cmd_envs: {[key: string]: string}  = { ...process.env } as {[key: string]: string};
         Envs.forEach(item => { cmd_envs[item.name] = item.value; });
-
+				Stdin = this.getNodeParameter('Stdin', itemIndex, []) as string;
 				WorkingDir = this.getNodeParameter('WorkingDir', itemIndex, '') as string;
         WorkingDir = WorkingDir.trim();
 				StdoutFormat = this.getNodeParameter('StdoutFormat', itemIndex, '') as string;
@@ -120,7 +129,7 @@ export class ProcessSpawnNode implements INodeType {
         let r = spawnSync(Cmd, cmd_args, {
           cwd: WorkingDir || undefined,
           env: cmd_envs,
-          input: item.json ? JSON.stringify(item.json) : undefined
+          input: Stdin || (item.json ? JSON.stringify(item.json) : '')
         });
         if (r?.status === 0) {
           let out_str = r.stdout.toString();
